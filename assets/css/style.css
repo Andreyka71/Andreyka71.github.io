@@ -236,6 +236,7 @@ h1, h2, h3, h4, h5 {
     
     .intro__photo {
         max-width: 300px;
+        transform: scale(1);
         margin: 0 auto;
     }
     
@@ -265,6 +266,12 @@ h1, h2, h3, h4, h5 {
     .nav__link {
         margin: 0 5px;
         font-size: 12px;
+    }
+
+    .intro__photo {
+        max-width: 200px;
+        transform: scale(1);
+        margin: 0 auto;
     }
     
     .worked-with__logos {
