@@ -2,6 +2,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Персональное портфолио Яковлева Андрея, студента МФТИ">
+    <meta name="keywords" content="портфолио, разработка, МФТИ, программирование">
+    <meta name="author" content="Яковлев Андрей">
+    <meta property="og:title" content="Персональное портфолио Яковлева Андрея">
+    <meta property="og:description" content="Сайт-портфолио студента МФТИ">
+    <meta property="og:type" content="website">
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Персональное портфолио</title>
 </head>
@@ -50,14 +57,24 @@
 <div id="feedback" class="feedback-section">
     <div class="container">
         <h2>Обратная связь</h2>
-        <form class="feedback-form">
-            <input type="text" placeholder="Ваше имя" required>
-            <input type="email" placeholder="Ваш email" required>
-            <textarea placeholder="Ваше сообщение" required></textarea>
+        <form class="feedback-form" id="feedbackForm" action="#" method="POST">
+            <input type="text" name="name" placeholder="Ваше имя" required>
+            <input type="email" name="email" placeholder="Ваш email" required>
+            <textarea name="message" placeholder="Ваше сообщение" required></textarea>
             <button type="submit">Отправить</button>
         </form>
+        <div id="formMessage" class="form-message"></div>
     </div>
 </div>
+
+<script>
+    document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        document.getElementById('formMessage').textContent = 'Форма успешно отправлена!';
+        document.getElementById('formMessage').style.color = 'green';
+        this.reset();
+    });
+</script>
 
 </body>
 </html>
