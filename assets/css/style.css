@@ -56,6 +56,8 @@ h1, h2, h3, h4, h5 {
     margin: 0 auto;
     background-color: black;
     display: flex;
+    padding-bottom: 150px;
+    position: relative;
     align-items: center;
 }
 
@@ -269,9 +271,7 @@ h1, h2, h3, h4, h5 {
     }
 
     .intro__photo {
-        max-width: 200px;
-        transform: scale(1);
-        margin: 0 auto;
+        margin: 20px auto;
     }
     
     .worked-with__logos {
