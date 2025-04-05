@@ -257,6 +257,10 @@ h1, h2, h3, h4, h5 {
 }
 
 @media (max-width: 550px) {
+    .intro {
+        padding-top: 60px;
+    }
+
     .intro__title {
         font-size: 1.5rem;
     }
