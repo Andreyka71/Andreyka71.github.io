@@ -173,12 +173,6 @@ h1, h2, h3, h4, h5 {
     color: white;
 }
 
-.countdown-finished {
-    font-size: 1.5rem;
-    color: orange;
-    padding: 20px;
-}
-
 /* Worked With Section */
 .worked-with {
     position: absolute;
@@ -281,14 +275,6 @@ h1, h2, h3, h4, h5 {
     align-items: center;
     opacity: 0;
     transition: opacity 0.3s ease;
-}
-
-.popup-content {
-    position: relative;
-    max-width: 90%;
-    max-height: 90%;
-    text-align: center;
-    padding: 40px;
 }
 
 #popupImage {

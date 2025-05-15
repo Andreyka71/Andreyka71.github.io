@@ -311,7 +311,6 @@
     }
 
     updateCountdown();
-    const countdownInterval = setInterval(updateCountdown, 1000);
 
     /// попап для обратной формы
     const openFeedbackPopup = document.getElementById('openFeedbackPopup');
@@ -382,7 +381,6 @@
     let lastScrollPosition = 0;
     window.addEventListener('scroll', () => {
         const scrollPosition = window.scrollY;
-        const scrollDelta = scrollPosition - lastScrollPosition;
         lastScrollPosition = scrollPosition;
         const parallaxValue = scrollPosition * 0.4;
         interactiveSvg.style.transform = `translateY(${parallaxValue}px)`;
