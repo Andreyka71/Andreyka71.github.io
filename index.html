@@ -308,7 +308,7 @@
     updateCountdown();
     const countdownInterval = setInterval(updateCountdown, 1000);
 
-    /// попап
+    /// попап для обратной формы
     const openFeedbackPopup = document.getElementById('openFeedbackPopup');
     const feedbackPopup = document.getElementById('feedbackPopup');
     const closeFeedbackPopup = document.getElementById('closeFeedbackPopup');
@@ -323,7 +323,7 @@
         document.body.style.overflow = 'auto';
     });
 
-    // 30 секунд
+    // попап через 30 секунд
     const messagePopup = document.getElementById('messagePopup');
     const closeMessagePopup = document.getElementById('closeMessagePopup');
 
@@ -332,13 +332,55 @@
         document.body.style.overflow = 'hidden';
     }
 
-    setInterval(() => {
-        showMessagePopup();
-    }, 30000);
+    if (!sessionStorage.getItem('messagePopupClosed')) {
+        setTimeout(() => {
+            showMessagePopup();
+        }, 30000);
+    }
 
     closeMessagePopup.addEventListener('click', () => {
         messagePopup.classList.remove('show');
         document.body.style.overflow = 'auto';
+        sessionStorage.setItem('messagePopupClosed', 'true');
+    });
+
+    const header = document.querySelector('.header');
+    const introSection = document.getElementById('intro');
+    let isFixed = false;
+
+    function checkScroll() {
+        const introBottom = introSection.getBoundingClientRect().bottom;
+
+        if (introBottom <= 0 && !isFixed) {
+            header.classList.add('fixed');
+            isFixed = true;
+        } else if (introBottom > 0 && isFixed) {
+            header.classList.remove('fixed');
+            isFixed = false;
+        }
+    }
+
+    window.addEventListener('scroll', checkScroll);
+
+    // svg
+    const interactiveSvg = document.getElementById('interactive-svg');
+    const movingCircle = document.getElementById('moving-circle');
+
+    document.addEventListener('mousemove', (e) => {
+        const mouseX = e.clientX / window.innerWidth;
+        const mouseY = e.clientY / window.innerHeight;
+        
+        movingCircle.setAttribute('cx', 150 + (mouseX * 60 - 30));
+        movingCircle.setAttribute('cy', 100 + (mouseY * 40 - 20));
+    });
+
+    let lastScrollPosition = 0;
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY;
+        const scrollDelta = scrollPosition - lastScrollPosition;
+        lastScrollPosition = scrollPosition;
+        const parallaxValue = scrollPosition * 0.2;
+        interactiveSvg.style.transform = `translateY(${parallaxValue}px)`;
     });
 </script>
 
