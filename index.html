@@ -9,6 +9,7 @@
     <meta property="og:title" content="Персональное портфолио Яковлева Андрея">
     <meta property="og:description" content="Сайт-портфолио студента МФТИ">
     <meta property="og:type" content="website">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Персональное портфолио</title>
 </head>
@@ -37,6 +38,27 @@
                     <div class="intro__subtitle">
                         <p>Учусь в МФТИ. Это мой первый сайт.</p>
                     </div>
+                    <div class="countdown-container">
+                        <h3>До получения диплома бакалавра МФТИ осталось:</h3>
+                        <div class="countdown">
+                            <div class="countdown-item">
+                                <span class="days">00</span>
+                                <span class="countdown-label">дней</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="hours">00</span>
+                                <span class="countdown-label">часов</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="minutes">00</span>
+                                <span class="countdown-label">минут</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="seconds">00</span>
+                                <span class="countdown-label">секунд</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="intro__right">
@@ -54,25 +76,269 @@
     </div>
 </div>
 
+<div id="projects" class="projects-section">
+    <div class="container">
+        <h2>Мои проекты</h2>
+        <div class="gallery">
+            <div class="gallery-item">
+                <img src="assets/img/gallery/project1.jpg" alt="Проект 1" class="gallery-image">
+            </div>
+            <div class="gallery-item">
+                <img src="assets/img/gallery/project2.jpg" alt="Проект 2" class="gallery-image">
+            </div>
+            <div class="gallery-item">
+                <img src="assets/img/gallery/project3.jpg" alt="Проект 3" class="gallery-image">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="popup" id="imagePopup">
+    <div class="popup-content">
+        <span class="close-popup">&times;</span>
+        <img src="" alt="" id="popupImage">
+        <div class="popup-nav">
+            <button class="nav-arrow left-arrow" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+            <button class="nav-arrow right-arrow" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+</div>
+
 <div id="feedback" class="feedback-section">
     <div class="container">
         <h2>Обратная связь</h2>
-        <form class="feedback-form" id="feedbackForm" action="#" method="POST">
-            <input type="text" name="name" placeholder="Ваше имя" required>
-            <input type="email" name="email" placeholder="Ваш email" required>
-            <textarea name="message" placeholder="Ваше сообщение" required></textarea>
-            <button type="submit">Отправить</button>
-        </form>
-        <div id="formMessage" class="form-message"></div>
+        <button id="openFeedbackPopup" class="open-popup-btn">Оставить обратную связь</button>
+        <div class="popup" id="feedbackPopup">
+            <div class="popup-content">
+                <span class="close-popup" id="closeFeedbackPopup">&times;</span>
+                <h2>Обратная связь</h2>
+                <form class="feedback-form" id="feedbackForm" action="#" method="POST">
+                    <input type="text" name="name" placeholder="Ваше имя" required id="nameInput">
+                    <input type="email" name="email" placeholder="Ваш email" required id="emailInput">
+                    <input type="tel" name="phone" placeholder="Ваш телефон" required id="phoneInput">
+                    <textarea name="message" placeholder="Ваше сообщение" required id="messageInput"></textarea>
+                    <button type="submit" id="submitBtn">Отправить</button>
+                </form>
+                <div id="formMessage" class="form-message"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="messagePopup" class="popup">
+    <div class="popup-content">
+        <span id="closeMessagePopup" class="close">&times;</span>
+        <p>Отправьте обратную связь, нам это очень нужно!</p>
     </div>
 </div>
 
 <script>
-    document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+    // Проверка
+    const form = document.getElementById('feedbackForm');
+    const nameInput = document.getElementById('nameInput');
+    const emailInput = document.getElementById('emailInput');
+    const phoneInput = document.getElementById('phoneInput');
+    const messageInput = document.getElementById('messageInput');
+    const submitBtn = document.getElementById('submitBtn');
+    const formMessage = document.getElementById('formMessage');
+
+    const textRegex = /^[a-zA-Zа-яА-ЯёЁ\s]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^(\+7|8)[\s-]?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
+
+    form.addEventListener('submit', function(e) {
         e.preventDefault();
-        document.getElementById('formMessage').textContent = 'Форма успешно отправлена!';
-        document.getElementById('formMessage').style.color = 'green';
-        this.reset();
+        resetErrors();
+        let isValid = true;
+
+        if (!textRegex.test(nameInput.value.trim())) {
+            showError(nameInput, 'Имя должно содержать только буквы (русские или английские)');
+            isValid = false;
+        }
+            
+        if (!emailRegex.test(emailInput.value.trim())) {
+            showError(emailInput, 'Пожалуйста, введите корректный email');
+            isValid = false;
+        }
+            
+        if (!phoneRegex.test(phoneInput.value.trim())) {
+            showError(phoneInput, 'Пожалуйста, введите корректный российский номер телефона');
+            isValid = false;
+        }
+            
+        if (messageInput.value.trim().length < 10) {
+            showError(messageInput, 'Сообщение должно содержать не менее 10 символов');
+            isValid = false;
+        }
+            
+        if (isValid) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправляем...';
+            submitBtn.style.backgroundColor = '#555';
+            submitBtn.style.cursor = 'not-allowed';
+
+            setTimeout(() => {
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Успешно отправлено!';
+                submitBtn.style.backgroundColor = '#4CAF50';
+                formMessage.textContent = 'Ваше сообщение успешно отправлено!';
+                formMessage.style.color = '#4CAF50';
+
+                setTimeout(() => {
+                    form.reset();
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Отправить';
+                    submitBtn.style.backgroundColor = 'orange';
+                    submitBtn.style.cursor = 'pointer';
+                    formMessage.textContent = '';
+                }, 3000);
+            }, 1500);
+        }
+    });
+
+    function showError(input, message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = message;
+        errorDiv.style.color = 'red';
+        errorDiv.style.fontSize = '0.8rem';
+        errorDiv.style.marginTop = '-15px';
+        errorDiv.style.marginBottom = '15px';
+        input.parentNode.insertBefore(errorDiv, input.nextSibling);
+        input.style.borderColor = 'red';
+    }
+        
+    function resetErrors() {
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(msg => msg.remove());
+        const inputs = [nameInput, emailInput, phoneInput, messageInput];
+        inputs.forEach(input => {
+            input.style.borderColor = 'gray';
+        }); 
+        formMessage.textContent = '';
+    }
+
+    // Галерея картинок
+    const galleryImages = document.querySelectorAll('.gallery-image');
+    const popup = document.getElementById('imagePopup');
+    const popupImg = document.getElementById('popupImage');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const closePopup = document.querySelector('.close-popup');
+
+    let currentImageIndex = 0;
+    const images = Array.from(galleryImages).map(img => img.src);
+
+    galleryImages.forEach((img, index) => {
+        img.addEventListener('click', () => {
+            currentImageIndex = index;
+            openPopup(currentImageIndex);
+        });
+    });
+
+    function openPopup(index) {
+        currentImageIndex = index;
+        popupImg.src = images[index];
+        popup.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        updateNavButtons();
+    }
+
+    function updateNavButtons() {
+        prevBtn.style.visibility = currentImageIndex === 0 ? 'hidden' : 'visible';
+        nextBtn.style.visibility = currentImageIndex === images.length - 1 ? 'hidden' : 'visible';
+        
+        prevBtn.style.marginLeft = currentImageIndex === 0 ? '0' : '20px';
+        nextBtn.style.marginRight = currentImageIndex === images.length - 1 ? '0' : '20px';
+        
+        prevBtn.style.transition = 'opacity 0.3s ease, margin 0.3s ease';
+        nextBtn.style.transition = 'opacity 0.3s ease, margin 0.3s ease';
+        
+        prevBtn.style.opacity = currentImageIndex === 0 ? '0' : '1';
+        nextBtn.style.opacity = currentImageIndex === images.length - 1 ? '0' : '1';
+    }
+
+    closePopup.addEventListener('click', () => {
+        popup.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    });
+
+    popup.addEventListener('click', (e) => {
+        if (e.target === popup) {
+            popup.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currentImageIndex > 0) {
+            currentImageIndex--;
+            popupImg.src = images[currentImageIndex];
+            updateNavButtons();
+        }
+    });
+
+    nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currentImageIndex < images.length - 1) {
+            currentImageIndex++;
+            popupImg.src = images[currentImageIndex];
+            updateNavButtons();
+        }
+    });
+
+    // Время
+    const graduationDate = new Date('May 31, 2028 00:00:00').getTime();
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = graduationDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+        document.querySelector('.days').textContent = days.toString().padStart(2, '0');
+        document.querySelector('.hours').textContent = hours.toString().padStart(2, '0');
+        document.querySelector('.minutes').textContent = minutes.toString().padStart(2, '0');
+        document.querySelector('.seconds').textContent = seconds.toString().padStart(2, '0');
+    }
+
+    updateCountdown();
+    const countdownInterval = setInterval(updateCountdown, 1000);
+
+    /// попап
+    const openFeedbackPopup = document.getElementById('openFeedbackPopup');
+    const feedbackPopup = document.getElementById('feedbackPopup');
+    const closeFeedbackPopup = document.getElementById('closeFeedbackPopup');
+
+    openFeedbackPopup.addEventListener('click', () => {
+        feedbackPopup.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    });
+
+    closeFeedbackPopup.addEventListener('click', () => {
+        feedbackPopup.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    });
+
+    // 30 секунд
+    const messagePopup = document.getElementById('messagePopup');
+    const closeMessagePopup = document.getElementById('closeMessagePopup');
+
+    function showMessagePopup() {
+        messagePopup.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    setInterval(() => {
+        showMessagePopup();
+    }, 30000);
+
+    closeMessagePopup.addEventListener('click', () => {
+        messagePopup.classList.remove('show');
+        document.body.style.overflow = 'auto';
     });
 </script>
 
