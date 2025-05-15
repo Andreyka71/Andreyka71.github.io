@@ -60,6 +60,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="svg-container">
+                    <svg id="interactive-svg" width="300" height="200" viewBox="0 0 300 200">
+                        <circle id="moving-circle" cx="150" cy="100" r="20" fill="orange"/>
+                    </svg>
+                </div>
             </div>
             <div class="intro__right">
                 <img src="assets/img/main_img.png" class="intro__photo" alt="Фото">
@@ -379,7 +384,7 @@
         const scrollPosition = window.scrollY;
         const scrollDelta = scrollPosition - lastScrollPosition;
         lastScrollPosition = scrollPosition;
-        const parallaxValue = scrollPosition * 0.2;
+        const parallaxValue = scrollPosition * 0.4;
         interactiveSvg.style.transform = `translateY(${parallaxValue}px)`;
     });
 </script>
